@@ -3,11 +3,11 @@ package org.example;
 public class AnagramMaker {
     public String make(String text){
 
-        if (text == null || text.isEmpty()) {
-            return "";
+        if (text == null) {
+            throw new IllegalArgumentException("Value is null");
         }
 
-        String anagramLine = "";
+        StringBuilder anagramLine = new StringBuilder();
 
         for (String word : text.split("\\s+")) {
 
@@ -47,10 +47,10 @@ public class AnagramMaker {
                 }
             }
 
-            anagramLine += new String(chars) + " ";
+            anagramLine.append(chars).append(" ");
         }
 
-        return anagramLine.trim();
+        return anagramLine.toString().trim();
     }
 
     private boolean isEnglishLetter(char value){

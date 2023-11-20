@@ -1,14 +1,17 @@
 package org.example;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AnagramMakerTest {
-    public AnagramMaker anagramMaker = new AnagramMaker();
+public class AnagramMakerTest {
 
     @Test
-    void make_Null_ThrowsIllegalArgumentException(){
+    public void shouldThrowExceptionWhenAnagramIsNull(){
+        AnagramMaker anagramMaker = new AnagramMaker();
+
         assertThrowsExactly(IllegalArgumentException.class,
                 ()->{
                     anagramMaker.make(null);
@@ -16,58 +19,65 @@ class AnagramMakerTest {
     }
 
     @Test
-    void make_EmptyString_EmptyString(){
+    public void shouldReturnEmptyStringWhenEmptyString(){
+        AnagramMaker anagramMaker = new AnagramMaker();
+
         assertEquals("", anagramMaker.make(""));
     }
 
-    @Test
-    void make_OneSpace_EmptyString(){
-        assertEquals("", anagramMaker.make(" "));
+
+    @ParameterizedTest
+    @ValueSource(strings = {" ", "  ", "   ", "    ",  "     ", "      "})
+    public void shouldReturnEmptyStringWhenOneOrManySpaces(String str){
+
+        AnagramMaker anagramMaker = new AnagramMaker();
+
+        assertEquals("", anagramMaker.make(str));
+    }
+
+
+    @ParameterizedTest
+    @ValueSource(strings = {"q", "1", ".", "-", "!"})
+    public void shouldReturnSameSymbolWhenSingleCharacter(String str){
+        AnagramMaker anagramMaker = new AnagramMaker();
+
+        assertEquals(str, anagramMaker.make(str));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"qqq", "ppppp"})
+    public void shouldReturnSameLettersWhenMultipleSameLetter(String str){
+        AnagramMaker anagramMaker = new AnagramMaker();
+
+        assertEquals(str,anagramMaker.make(str));
     }
 
     @Test
-    void make_SomeSpace_EmptyString(){
-        assertEquals("", anagramMaker.make("  "));
-        assertEquals("", anagramMaker.make("   "));
-        assertEquals("", anagramMaker.make("    "));
-        assertEquals("", anagramMaker.make("     "));
-        assertEquals("", anagramMaker.make("      "));
-        assertEquals("", anagramMaker.make("       "));
-    }
+    public void shouldReturnAnagramWhenSomeCharacterLowerAndUpper(){
+        AnagramMaker anagramMaker = new AnagramMaker();
 
-    @Test
-    void make_SingleCharacter_Character(){
-        assertEquals("q", anagramMaker.make("q"));
-        assertEquals("1", anagramMaker.make("1"));
-        assertEquals(".", anagramMaker.make("."));
-        assertEquals("-", anagramMaker.make("-"));
-        assertEquals("!", anagramMaker.make("!"));
-    }
-
-    @Test
-    void make_MultipleSameLetter_MultipleSameLetter(){
-        assertEquals("qqq",anagramMaker.make("qqq"));
-        assertEquals("ppppp",anagramMaker.make("ppppp"));
-    }
-
-    @Test
-    void make_SameCharacterLowerAndUpper_AnagramCharacter(){
         assertEquals("QqqqQQQq", anagramMaker.make("qQQQqqqQ"));
     }
 
     @Test
-    void make_WordDifferentLetter_AnagramWord(){
+    public void shouldReturnAnagramWordWhenWordDifferentLetter(){
+        AnagramMaker anagramMaker = new AnagramMaker();
+
         assertEquals("olleH",anagramMaker.make("Hello"));
         assertEquals("12Hello",anagramMaker.make("12olleH"));
     }
 
     @Test
-    void make_OnlySymbols_SameTerm(){
+    public void shouldReturnNonAnagramsWhenOnlySymbols(){
+        AnagramMaker anagramMaker = new AnagramMaker();
+
         assertEquals("12/!()%%",anagramMaker.make("12/!()%%"));
     }
 
     @Test
-    void make_SeveralWords_AnagramSeveralWords(){
+    public void shouldReturnAnagramWordsWhenSeveralWords(){
+        AnagramMaker anagramMaker = new AnagramMaker();
+
         assertEquals("123 qwe 1q2w3e", anagramMaker.make("123 ewq 1e2w3q"));
     }
 }

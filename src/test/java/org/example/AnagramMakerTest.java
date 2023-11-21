@@ -2,6 +2,7 @@ package org.example;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AnagramMakerTest {
 
     @Test
-    public void shouldThrowExceptionWhenAnagramIsNull(){
+    public void shouldThrowExceptionWhenTextIsNull(){
         AnagramMaker anagramMaker = new AnagramMaker();
 
         assertThrowsExactly(IllegalArgumentException.class,
@@ -53,22 +54,22 @@ public class AnagramMakerTest {
     }
 
     @Test
-    public void shouldReturnAnagramWhenSomeCharacterLowerAndUpper(){
+    public void shouldReturnReverseWhenSomeCharacterLowerAndUpper(){
         AnagramMaker anagramMaker = new AnagramMaker();
 
         assertEquals("QqqqQQQq", anagramMaker.make("qQQQqqqQ"));
     }
 
-    @Test
-    public void shouldReturnAnagramWordWhenWordDifferentLetter(){
+    @ParameterizedTest
+    @CsvSource({"Hello, olleH", "12olleH, 12Hello"})
+    public void shouldReturnAnagramWordWhenWordDifferentLetter(String input, String result){
         AnagramMaker anagramMaker = new AnagramMaker();
 
-        assertEquals("olleH",anagramMaker.make("Hello"));
-        assertEquals("12Hello",anagramMaker.make("12olleH"));
+        assertEquals(result,anagramMaker.make(input));
     }
 
     @Test
-    public void shouldReturnNonAnagramsWhenOnlySymbols(){
+    public void shouldNotReverseWhenOnlySymbols(){
         AnagramMaker anagramMaker = new AnagramMaker();
 
         assertEquals("12/!()%%",anagramMaker.make("12/!()%%"));
